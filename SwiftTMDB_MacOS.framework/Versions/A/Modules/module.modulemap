@@ -1,0 +1,11 @@
+framework module SwiftTMDB_MacOS {
+  umbrella header "SwiftTMDB_MacOS.h"
+
+  export *
+  module * { export * }
+}
+
+module SwiftTMDB_MacOS.Swift {
+    header "SwiftTMDB_MacOS-Swift.h"
+    requires objc
+}

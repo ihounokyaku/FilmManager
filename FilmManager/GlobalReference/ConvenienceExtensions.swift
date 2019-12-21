@@ -50,6 +50,20 @@ extension String {
         }
     }
     
+    func steppedUp()->String {
+        
+        let components = self.components(separatedBy: "-")
+        
+        if let last = components.last,  let int = Int(String(last)) {
+            
+            return components.dropLast().joined(separator: "") + "-\(int + 1)"
+            
+        }
+        
+        return self + "-1"
+    
+    }
+    
 }
 
 extension URL {
@@ -66,6 +80,27 @@ extension URL {
         if FileManager.default.fileExists(atPath: path) {return true}
         
         return false
+        
+    }
+    
+    var tags: [String] {
+        
+        var tagArray = [String]()
+        
+        do {
+            
+            if let tagResults = try (self as NSURL).resourceValues(forKeys: [.tagNamesKey])[.tagNamesKey] as? [String] {
+                
+                tagArray = tagResults
+            }
+            
+        } catch {
+            
+            Alert.PresentErrorAlert(text: "Error getting tags\n" + error.localizedDescription)
+            
+        }
+        
+        return tagArray
         
     }
 }

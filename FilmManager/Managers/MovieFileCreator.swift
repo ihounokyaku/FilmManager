@@ -54,25 +54,48 @@ class MovieFileCreator: NSObject {
         
         let destinationURL = FileManager.ExternalDestinationAvailable ? Prefs.ExternalDestinationFolder! : Prefs.LocalDestinationFolder
         
-        guard let folderURL = FileManager.CreateUniqueFolder(withName: movie.title, atDestination: destinationURL, alternateNameSuggestion: "\(movie.title) (\(movie.releaseDate.year()))") else { return }
+        var title = movie.title.replacingOccurrences(of: "/", with: " -")
+        title = movie.title.replacingOccurrences(of: ":", with: " -")
         
-        
-        let copyOperation = CopyOperation(sourceFileURL:videoFileURL, destinationFileURL: folderURL, delegate: self, key:key)
-            
-        self.executeOrQueue(operation: copyOperation)
+        guard let folderURL = FileManager.CreateUniqueFolder(withName: title, atDestination: destinationURL, alternateNameSuggestion: "\(movie.title) (\(movie.releaseDate.year()))") else { return }
         
 
         MovieFileManager.ConstructMovieFolder(forMovie: movie, toFolder: folderURL, withTags: tags, updateCatalogue: Prefs.CreateLibrary)
         
-        MovieFileManager.CopySubtitles(fromFolder: videoFileURL.deletingLastPathComponent(), toFolder: folderURL)
         
-       guard Prefs.CreateBackup, MovieFileManager.BackupFolderExists else { return }
+        
+        if let backupURL = MovieFileManager.CreateBackupFolder(forFolder: folderURL) {
+
+
+            MovieFileManager.ConstructMovieFolder(forMovie: movie, toFolder: backupURL, withTags: tags, updateCatalogue: false)
+
+        }
+
+        let copyOperation = CopyOperation(sourceFileURL:videoFileURL, destinationFileURL: folderURL, delegate: self, key:key)
+
+        self.executeOrQueue(operation: copyOperation)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             
-        guard let backupURL = FileManager.CreateFolder(withName: folderURL.lastPathComponent, atDestination: Prefs.BackupDestinationFolder!) else { return }
+            SubtitleManager.CopySubtitles(fromURL: videoFileURL.deletingLastPathComponent(), toFolder: folderURL, movieTitle: movie.title)
+            
+        }
+
+    }
+    
+    func copy3DFile(atURL fileURL:URL, toMovieFolder folderURL:URL, key:String?) {
         
-        MovieFileManager.ConstructMovieFolder(forMovie: movie, toFolder: backupURL, withTags: tags, updateCatalogue: false)
+        guard let extrasURL = FileManager.CreateFolder(withName: MovieFileManager.SubFolderName.extras.rawValue, atDestination: folderURL) else { return }
         
-        MovieFileManager.CopySubtitles(fromFolder: videoFileURL.deletingLastPathComponent(), toFolder: backupURL)
+        guard let newfileURL = FileManager.ChangeName(ofItemAtURL: fileURL, to: folderURL.lastPathComponent + "-3D") else { return }
+        
+        SubtitleManager.CopySubtitles(fromURL: newfileURL.deletingLastPathComponent(), toFolder: folderURL, movieTitle: folderURL.lastPathComponent, extras:true)
+        
+        MovieFileManager.AddTags(["3D"], toFolder: folderURL)
+        
+        let copyOperation = CopyOperation(sourceFileURL:newfileURL, destinationFileURL: extrasURL, delegate: self, key:key)
+        
+        self.executeOrQueue(operation: copyOperation)
         
     }
     
@@ -123,7 +146,7 @@ class MovieFileCreator: NSObject {
                     if currentFileSize >= totalFileSize {
                         
                         self.delegate?.taskComplete(inMovieCreator: self, key: key)
-                        
+                        self.finishOperationAndContinue(operation: operation)
                         timer.invalidate()
                         
                     }

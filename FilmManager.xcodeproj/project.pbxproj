@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		27D4A530D25F9A124DC491B5 /* Pods_FilmManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BB95A547DC8F2E3780AC50C /* Pods_FilmManager.framework */; };
+		C4116F9C22D8CA28006548EA /* SubtitleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4116F9B22D8CA28006548EA /* SubtitleManager.swift */; };
 		C435057922CDDFCC008E44D0 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = C435057822CDDFCC008E44D0 /* Tag.swift */; };
 		C435057F22CDF210008E44D0 /* CheckCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C435057E22CDF210008E44D0 /* CheckCell.swift */; };
 		C435058322CE3C19008E44D0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = C435058222CE3C19008E44D0 /* Colors.swift */; };
@@ -32,6 +33,10 @@
 		C4AFAD5222CCBA1F004484ED /* FileDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFAD4E22CCBA1A004484ED /* FileDropView.swift */; };
 		C4AFAD5322CCBA1F004484ED /* FolderDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFAD4F22CCBA1A004484ED /* FolderDropView.swift */; };
 		C4CC59E522D74CCA0090DD4C /* LibraryCatalogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC59E422D74CCA0090DD4C /* LibraryCatalogManager.swift */; };
+		C4DDFB2C22DBA06E00070E72 /* LanguageDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFB2B22DBA06E00070E72 /* LanguageDictionary.swift */; };
+		C4E51A0322D7881D005ADCB7 /* MixDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E51A0222D7881C005ADCB7 /* MixDropView.swift */; };
+		C4E51A0522D798D3005ADCB7 /* UpdateMovieVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E51A0422D798D3005ADCB7 /* UpdateMovieVC.swift */; };
+		C4E51A0822D798EB005ADCB7 /* AddUpDateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E51A0622D798EB005ADCB7 /* AddUpDateVC.swift */; };
 		C4E913CD22D1332900FC68C2 /* LocationPrefsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E913CB22D1332900FC68C2 /* LocationPrefsVC.swift */; };
 		C4E913D022D1363D00FC68C2 /* Panel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E913CF22D1363D00FC68C2 /* Panel.swift */; };
 /* End PBXBuildFile section */
@@ -54,6 +59,7 @@
 		14B4C84F73DDE89106E53A20 /* Pods-FilmManager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FilmManager.debug.xcconfig"; path = "Target Support Files/Pods-FilmManager/Pods-FilmManager.debug.xcconfig"; sourceTree = "<group>"; };
 		719D214D6ABFD8B6FBD2D09C /* Pods-FilmManager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FilmManager.release.xcconfig"; path = "Target Support Files/Pods-FilmManager/Pods-FilmManager.release.xcconfig"; sourceTree = "<group>"; };
 		7BB95A547DC8F2E3780AC50C /* Pods_FilmManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FilmManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4116F9B22D8CA28006548EA /* SubtitleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitleManager.swift; sourceTree = "<group>"; };
 		C435057822CDDFCC008E44D0 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		C435057E22CDF210008E44D0 /* CheckCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCell.swift; sourceTree = "<group>"; };
 		C435058222CE3C19008E44D0 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -80,6 +86,10 @@
 		C4AFAD4F22CCBA1A004484ED /* FolderDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderDropView.swift; sourceTree = "<group>"; };
 		C4AFAD5022CCBA1A004484ED /* DropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropView.swift; sourceTree = "<group>"; };
 		C4CC59E422D74CCA0090DD4C /* LibraryCatalogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryCatalogManager.swift; sourceTree = "<group>"; };
+		C4DDFB2B22DBA06E00070E72 /* LanguageDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageDictionary.swift; sourceTree = "<group>"; };
+		C4E51A0222D7881C005ADCB7 /* MixDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixDropView.swift; sourceTree = "<group>"; };
+		C4E51A0422D798D3005ADCB7 /* UpdateMovieVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateMovieVC.swift; sourceTree = "<group>"; };
+		C4E51A0622D798EB005ADCB7 /* AddUpDateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUpDateVC.swift; sourceTree = "<group>"; };
 		C4E913CB22D1332900FC68C2 /* LocationPrefsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPrefsVC.swift; sourceTree = "<group>"; };
 		C4E913CF22D1363D00FC68C2 /* Panel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Panel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -126,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				C4AFAD4B22CCB5DD004484ED /* UserPrefs.swift */,
+				C4DDFB2B22DBA06E00070E72 /* LanguageDictionary.swift */,
 				C435058222CE3C19008E44D0 /* Colors.swift */,
 				C4AF480422D0DCE900ED8032 /* KodiKrap.swift */,
 				C4AF480222CFBD2F00ED8032 /* ImageExtensions.swift */,
@@ -145,6 +156,7 @@
 				C449187922D3532A00E82118 /* MovieFileCreator.swift */,
 				C449187B22D39BD800E82118 /* CopyOperation.swift */,
 				C4CC59E422D74CCA0090DD4C /* LibraryCatalogManager.swift */,
+				C4116F9B22D8CA28006548EA /* SubtitleManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -153,6 +165,8 @@
 			isa = PBXGroup;
 			children = (
 				C4AFAD3822CCB374004484ED /* NewMovieViewController.swift */,
+				C4E51A0422D798D3005ADCB7 /* UpdateMovieVC.swift */,
+				C4E51A0622D798EB005ADCB7 /* AddUpDateVC.swift */,
 				C4E913CB22D1332900FC68C2 /* LocationPrefsVC.swift */,
 				C46D2D0722D23F4F002A5AB9 /* PrefsVC.swift */,
 			);
@@ -200,6 +214,7 @@
 			children = (
 				C4AFAD5022CCBA1A004484ED /* DropView.swift */,
 				C4AFAD4E22CCBA1A004484ED /* FileDropView.swift */,
+				C4E51A0222D7881C005ADCB7 /* MixDropView.swift */,
 				C4AFAD4F22CCBA1A004484ED /* FolderDropView.swift */,
 				C435057E22CDF210008E44D0 /* CheckCell.swift */,
 			);
@@ -340,21 +355,26 @@
 				C449187C22D39BD800E82118 /* CopyOperation.swift in Sources */,
 				C4AFAD5222CCBA1F004484ED /* FileDropView.swift in Sources */,
 				C4AFAD3922CCB374004484ED /* NewMovieViewController.swift in Sources */,
+				C4E51A0822D798EB005ADCB7 /* AddUpDateVC.swift in Sources */,
 				C4AFAD5122CCBA1F004484ED /* DropView.swift in Sources */,
 				C435057922CDDFCC008E44D0 /* Tag.swift in Sources */,
 				C4CC59E522D74CCA0090DD4C /* LibraryCatalogManager.swift in Sources */,
 				C4AFAD4C22CCB5DD004484ED /* UserPrefs.swift in Sources */,
 				C4AF47FF22CFA7BB00ED8032 /* FileManager.swift in Sources */,
+				C4DDFB2C22DBA06E00070E72 /* LanguageDictionary.swift in Sources */,
 				C435058722CE43E2008E44D0 /* ConvenienceExtensions.swift in Sources */,
 				C4AF480522D0DCE900ED8032 /* KodiKrap.swift in Sources */,
 				C46D2D2622D2492D002A5AB9 /* MovieFileManager.swift in Sources */,
+				C4E51A0322D7881D005ADCB7 /* MixDropView.swift in Sources */,
 				C449187A22D3532A00E82118 /* MovieFileCreator.swift in Sources */,
 				C4E913D022D1363D00FC68C2 /* Panel.swift in Sources */,
+				C4E51A0522D798D3005ADCB7 /* UpdateMovieVC.swift in Sources */,
 				C4AF480322CFBD2F00ED8032 /* ImageExtensions.swift in Sources */,
 				C4AF480122CFA9AA00ED8032 /* Alerts.swift in Sources */,
 				C4AFAD3722CCB374004484ED /* AppDelegate.swift in Sources */,
 				C4AF480722D10EB200ED8032 /* PresentationManager.swift in Sources */,
 				C4AFAD5322CCBA1F004484ED /* FolderDropView.swift in Sources */,
+				C4116F9C22D8CA28006548EA /* SubtitleManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

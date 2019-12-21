@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class FileDropView: DropView {
+class MixDropView: DropView {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -16,15 +16,20 @@ class FileDropView: DropView {
             }
     
     
-    override func setType() { self.dropViewType = .file }
+    override func setType() { self.dropViewType = .mixed }
     
-    var expectedExt = ["mkv", "mp4", "m4v", "avi"]
+    var expectedExt = [String]()
     
     override func checkExtension(_ drag: NSDraggingInfo) -> Bool {
        
         if let url = self.getUrl(drag) {
             let suffix = url.pathExtension
             
+            if url.hasDirectoryPath {
+                
+                return true
+                
+            }
             
             for ext in self.expectedExt {
                 if ext.lowercased() == suffix {

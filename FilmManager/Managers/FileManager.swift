@@ -40,6 +40,8 @@ extension FileManager {
         }
 
     }
+    
+    
 
     static func CreateFolder(withName name:String, atDestination destination:URL)->URL? {
         let folder = destination.appendingPathComponent(name)
@@ -49,6 +51,7 @@ extension FileManager {
         }
         
         do {
+            
             
             try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: false, attributes: nil)
             
@@ -80,6 +83,23 @@ extension FileManager {
     
     static func AddTags(_ tags:[String], toFileAtURL folder:URL) {
         
+        var folderTags = folder.tags
+        for tag in tags {
+            
+            if !(folderTags.map {$0.lowercased()}).contains(tag.lowercased()) {
+                
+                folderTags.append(tag)
+                
+            }
+            
+        }
+        
+        self.SetTags(ofFileAtURL: folder, to: folderTags)
+        
+    }
+    
+    static func SetTags(ofFileAtURL folder:URL, to tags:[String]) {
+        
         do {
             
             try (folder as NSURL).setResourceValue(tags, forKey: .tagNamesKey)
@@ -92,6 +112,7 @@ extension FileManager {
         }
         
     }
+
     
     static func Contents(ofFolder folderUrl:URL) -> [URL] {
         var urls = [URL]()
@@ -110,23 +131,48 @@ extension FileManager {
     }
     
     
-    static func CopyFile(atURL fileURL:URL, toFolder folderURL:URL, operation:CopyOperation?) {
+    static func CopyFile(atURL fileURL:URL, toFolder folderURL:URL, overwrite:Bool = false, newFileName:String? = nil, operation:CopyOperation?) {
         
-        let fileName = fileURL.lastPathComponent
+        let fileName = newFileName ?? fileURL.lastPathComponent
         
          DispatchQueue.global(qos: .utility).async {
             
             do {
-                try FileManager.default.copyItem(at: fileURL, to: folderURL.appendingPathComponent(fileName))
+                let destination = folderURL.appendingPathComponent(fileName)
+                
+                if overwrite { try? FileManager.default.removeItem(at: destination) }
+                
+                try FileManager.default.copyItem(at: fileURL, to: destination)
                 
             } catch let error as NSError{
                 
                 DispatchQueue.main.async {
+                    
                     operation?.cancel()
+                    
                     Alert.PresentErrorAlert(text: "Error copying file!\n" + error.localizedDescription)
                     
                 }
             }
+            
+        }
+        
+    }
+    
+    static func ChangeName(ofItemAtURL sourceURL:URL, to newName:String)-> URL? {
+        
+        let pathExtension = sourceURL.pathExtension
+        
+        let newURL = sourceURL.deletingLastPathComponent().appendingPathComponent(newName).appendingPathExtension(pathExtension)
+        
+        do {
+            
+            try FileManager.default.moveItem(at: sourceURL, to: newURL)
+            return newURL
+            
+        } catch {
+            Alert.PresentErrorAlert(text: "Error renaming file!\n" + error.localizedDescription)
+            return nil
             
         }
         
@@ -148,6 +194,37 @@ extension FileManager {
         
     }
     
+    static func StringFromFile(atURL url:URL)-> String? {
+        
+        do {
+            
+            return try String(contentsOf: url)
+            
+        } catch let error {
+            
+            Alert.PresentErrorAlert(text: "Could not get contents of idx file\n" + error.localizedDescription)
+            
+        }
+        return nil
+    }
+    
+    static func OpenString(atURL srtURL:URL, withEncoding encoding:String.Encoding)-> String? {
+        
+        do {
+            
+            let text = try String(contentsOf: srtURL, encoding: encoding)
+            
+            return text
+            
+        } catch {
+            
+            return nil
+        }
+        
+    }
+    
     
     
 }
+
+

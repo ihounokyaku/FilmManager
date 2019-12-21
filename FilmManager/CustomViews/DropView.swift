@@ -18,6 +18,7 @@ enum DropViewType:String {
     
     case file = "file"
     case folder = "folder"
+    case mixed = "mixed"
     
 }
 
@@ -37,6 +38,7 @@ class DropView: NSView {
         
     }()
     
+    var isEnabled = true
     
     var delegate:DropViewDelegate?
     
@@ -70,11 +72,15 @@ class DropView: NSView {
     
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
         
-        if checkExtension(sender) == true {
+        if self.isEnabled && checkExtension(sender) {
+            
             self.layer?.backgroundColor = NSColor.blue.cgColor
             return .copy
+            
         } else {
+            
             return NSDragOperation()
+            
         }
     }
     

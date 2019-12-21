@@ -115,7 +115,7 @@ class Prefs:NSObject {
         
         get {
             
-            return UserDefaults.standard.value(forKey: "CheckBoxTitles") as? [String] ?? ["to watch", "Thai", "English", "japanese", "mindfuck", "3D"]
+            return UserDefaults.standard.value(forKey: "CheckBoxTitles") as? [String] ?? ["to watch", "Thai", "English", "japanese", "mindfuck", "CG", "Super Hero"]
            
         }
         
@@ -151,6 +151,22 @@ class Prefs:NSObject {
         }
         
         
+    }
+    
+    static var LanguagesToTag:[String] {
+        get {
+            
+            return UserDefaults.standard.value(forKey: "LanguagesToTag") as? [String] ?? ["japanese", "english", "thai"]
+            
+        }
+        
+        set {
+            
+            UserDefaults.standard.set(newValue, forKey: "LanguagesToTag")
+            
+        }
+    
+    
     }
     
     

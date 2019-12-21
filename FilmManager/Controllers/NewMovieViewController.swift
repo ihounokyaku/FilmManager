@@ -10,26 +10,19 @@ import Cocoa
 import SwiftTMDB_MacOS
 import SwiftyJSON
 
-class NewMovieViewController: NSViewController {
-    
+class NewMovieViewController: AddUpDateVC {
 
     //MARK: - =============== IBOUTLETS ===============
     @IBOutlet weak var fileDropView: FileDropView!
     
     //MARK: - === Tables ===
     @IBOutlet weak var suggestionTable: NSTableView!
-    @IBOutlet weak var tagTable: NSTableView!
     
     //MARK: - === Buttons ===
     @IBOutlet weak var createFileButton: NSButton!
     
-    //MARK: - === FIELDS ===
-    @IBOutlet weak var addTagField: NSTextField!
-    
-    
     //MARK: - === Other Views ===
     @IBOutlet weak var posterView: NSImageView!
-    @IBOutlet weak var progressBar: NSProgressIndicator!
     
     //MARK: - =============== VARS ===============
     
@@ -39,10 +32,6 @@ class NewMovieViewController: NSViewController {
     
     //MARK: - === DataSets ===
     var suggestionTableData = [TMDBMovie]()
-    
-    var tagTableData = [Tag]()
-    
-    var selectedTags:[Tag] { return self.tagTableData.filter{ $0.checked } }
     
     var selectedMovie:TMDBMovie? {
         
@@ -56,9 +45,7 @@ class NewMovieViewController: NSViewController {
     var currentSearchTitle:String?
     
     var currentMovieURL:URL?
-    
-    let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-    
+
     //MARK: - =============== SETUP ===============
     
     override func viewDidLoad() {
@@ -73,6 +60,8 @@ class NewMovieViewController: NSViewController {
         self.setDelegate(forTableView: self.suggestionTable)
         
         self.setDelegate(forTableView: self.tagTable)
+        
+        
         
     }
 
@@ -162,28 +151,6 @@ class NewMovieViewController: NSViewController {
     
     //MARK: - =============== USER INTERACTION ===============
  
-    @IBAction func checkBoxChecked(_ sender: NSButton) {
-        
-        let index = self.tagTable.row(for: sender)
-        if index >= 0 {
-            
-            self.tagTableData[index].checked = !self.tagTableData[index].checked
-            
-        }
-        
-    }
-    
-    @IBAction func newTagEntered(_ sender: NSTextField) {
-        
-        let str = sender.stringValue
-        guard str != "", !(self.tagTableData.map{ return $0.name }.contains(str)) else {return}
-        
-        sender.stringValue = ""
-        self.tagTableData.append(Tag(name: str, checked: true, type: .user))
-        
-        self.tagTable.reloadData()
-        
-    }
     
     @IBAction func createFilePressed (_ sender: Any) {
         
@@ -193,10 +160,69 @@ class NewMovieViewController: NSViewController {
             return
         }
         
-        let fileCreator = MovieFileCreator(delegate: self)
         
-        fileCreator.fileMovie(movie, withTags: self.selectedTags.map{ $0.name }, videoFileURL: movieURL, key: "\(movie.id)")
+        
+        fileCreator.fileMovie(movie, withTags: (self.selectedTags.map{ $0.name }).appending("movie"), videoFileURL: movieURL, key: "\(movie.id)")
     
+    }
+    
+    //MARK: - =============== DROP VIEW ===============
+    
+    override func didGetURL(url: URL, dropView: DropView) {
+        
+        print("got URL")
+        
+        self.clearAll()
+        
+        self.currentMovieURL = url
+        
+        self.currentSearchTitle = url.deletingPathExtension().lastPathComponent
+        
+        self.queryManager.searchForMovie(title: currentSearchTitle!.searchString())
+        
+    }
+    
+    //MARK: - =============== TABLEVIEW ===============
+    
+    override func numberOfRows(in tableView: NSTableView) -> Int {
+        
+        return tableView == self.suggestionTable ? self.suggestionTableData.count : super.numberOfRows(in: tableView)
+        
+    }
+    
+    override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        var view:NSView?
+        
+        if tableView == self.suggestionTable {
+            
+            let cellView = (tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as! NSTableCellView)
+            
+            let dataSource = self.suggestionTableData[row]
+            
+            cellView.textField?.stringValue = tableColumn?.identifier.rawValue == "Title" ? dataSource.title : dataSource.releaseDate.year()
+            
+            view = cellView
+            
+        } else {
+            
+            view = super.tableView(tableView, viewFor: tableColumn, row: row)
+            
+        }
+        
+        return view
+        
+    }
+    
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        
+        if let tableView = notification.object as? NSTableView, tableView == self.suggestionTable {
+            
+            self.addTagField.stringValue = ""
+            self.refreshMovieView()
+            self.refreshTagTableView()
+            
+        }
+        
     }
 
     
@@ -214,9 +240,11 @@ extension NewMovieViewController:TMDBQueryManagerDelegate {
     func objectQueryComplete(TMDBQueryManager: TMDBQueryManager, queryType: TMDBQueryManager.QueryType, results: [TMDBObject]?, error: String?, key: String?, sender: Any?) {
         
         guard let realResults = results else  {
-            print("ERROR!! \(error ?? "Unknown Error!")")
+           Alert.PresentErrorAlert(text: "No results " + (error ?? "unknown error"))
             return
         }
+        
+        guard realResults.count > 0 else {Alert.PresentErrorAlert(text: "No results!"); return}
         
         if queryType == .search {
             
@@ -251,123 +279,6 @@ extension NewMovieViewController:TMDBQueryManagerDelegate {
             
         }
         
-        
-    }
-    
-}
-
-
-
-
-//MARK: - =============== MOVIE CREATOR ===============
-
-extension NewMovieViewController:MovieCreatorDelegate {
-    
-    func taskBegan(inMovieCreator movieCreator: MovieFileCreator, key: String?) {
-        
-        self.progressBar.doubleValue = 0
-        
-    }
-    
-    func taskComplete(inMovieCreator movieCreator: MovieFileCreator, key: String?) {
-        
-        self.progressBar.doubleValue = 0
-        
-    }
-    
-    func updateCopyProgress(forMovieCreator movieCreator: MovieFileCreator, amountComplete: Double, total: Double, key: String?) {
-        
-        self.progressBar.doubleValue = (amountComplete / total) * 100
-        
-    }
-    
-    func handleMovieCreatorError(forMovieCreator movieCreator: MovieFileCreator, key: String?, error: Error?) {
-    
-    }
-    
-    
-}
-
-//MARK: - =============== DROP VIEW ===============
-
-extension NewMovieViewController:DropViewDelegate {
-    
-    func didGetURL(url: URL, dropView: DropView) {
-        
-        self.clearAll()
-        
-        self.currentMovieURL = url
-        
-        self.currentSearchTitle = url.deletingPathExtension().lastPathComponent
-        
-        self.queryManager.searchForMovie(title: currentSearchTitle!.searchString())
-        
-    }
-    
-}
-
-
-
-
-//MARK: - =============== TABLEVIEW ===============
-
-
-extension NewMovieViewController:NSTableViewDelegate, NSTableViewDataSource {
-    
-    func numberOfRows(in tableView: NSTableView) -> Int {
-        
-        return tableView == self.suggestionTable ? self.suggestionTableData.count : self.tagTableData.count
-        
-    }
-    
-    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        var view:NSView?
-        
-        if tableView == self.suggestionTable {
-            
-            let cellView = (tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as! NSTableCellView)
-            
-            let dataSource = self.suggestionTableData[row]
-            
-            cellView.textField?.stringValue = tableColumn?.identifier.rawValue == "Title" ? dataSource.title : dataSource.releaseDate.year()
-            
-            view = cellView
-            
-        } else if tableView == self.tagTable {
-            
-            let tag = self.tagTableData[row]
-            
-            let checkCell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as! CheckCell
-            
-            checkCell.checkBox.state = tag.checked == true ? .on : .off
-            
-            checkCell.checkBox.title = tag.name
-            
-            checkCell.checkBox.attributedTitle = NSAttributedString(string: tag.name, attributes: [ NSAttributedString.Key.foregroundColor: NSColor.TextDarkPrimary()])
-            
-            let alpha:CGFloat = 0.6
-            
-            let cellColors:[TagType:NSColor] = [.userDefault:NSColor.OffWhitePrimary(alpha:alpha), .queried:NSColor.ColorSecondaryLight(alpha: alpha), .user:NSColor.ColorTextEmphasisLight()]
-            
-            checkCell.wantsLayer = true
-            checkCell.layer?.backgroundColor = cellColors[tag.type]?.cgColor
-            
-            view = checkCell
-        }
-        
-        return view
-        
-    }
-    
-    func tableViewSelectionDidChange(_ notification: Notification) {
-        
-        if let tableView = notification.object as? NSTableView, tableView == self.suggestionTable {
-            
-            self.addTagField.stringValue = ""
-            self.refreshMovieView()
-            self.refreshTagTableView()
-            
-        }
         
     }
     

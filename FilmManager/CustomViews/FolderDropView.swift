@@ -25,7 +25,7 @@ class FolderDropView: DropView {
     }
     
     override func checkExtension(_ drag: NSDraggingInfo) -> Bool {
-        print("going to check extension")
+        
         if let url = self.getUrl(drag) {
             return url.hasDirectoryPath
         }

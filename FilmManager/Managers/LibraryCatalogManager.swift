@@ -14,11 +14,13 @@ class LibraryCatalogManager: NSObject {
     
     static var CatalogFileURL:URL? {
         
-        guard let folderURL = Prefs.LibraryDestinationFolder, folderURL.hasDirectoryPath else {return nil}
+        guard Prefs.CreateLibrary, let folderURL = Prefs.LibraryDestinationFolder, folderURL.hasDirectoryPath else {return nil}
         
         return folderURL.appendingPathComponent("FilmLibrary.json")
         
     }
+    
+    
     
     static var CatalogueFile:JSON? {
         
